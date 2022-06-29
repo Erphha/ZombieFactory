@@ -1,7 +1,9 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-contract ZombieFactory {
+import './Ownable.sol';
+
+contract ZombieFactory is Ownable{
     
     event NewZombie(uint256 zombieId, string name, uint256 dna);
 
