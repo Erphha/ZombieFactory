@@ -27,8 +27,8 @@ contract ZombieOwnership is ZombieAttack, ERC721 {
     }
 
     function _transfer(address _from, address _to, uint256 _tokenId) private{
-        ownerZombieCount[_to] = ownerZombieCount[_to].add(1);
-        ownerZombieCount[_from] = ownerZombieCount[_from].sub(1);
+        ownerZombieCount[_to]++;
+        ownerZombieCount[_from]--;
         zombieToOwner[_tokenId] = _to;
         emit Transfer(_from, _to, _tokenId);
     }
@@ -39,15 +39,16 @@ contract ZombieOwnership is ZombieAttack, ERC721 {
         uint256 _tokenId
     ) external payable override {
         require(zombieToOwner[_tokenId] == msg.sender || zombieApprovals[_tokenId] == msg.sender);
+        _transfer(_from, _to,_tokenId);
     }
 
     function approve(address _approved, uint256 _tokenId)
         external
         payable
-        ownerOfZombie
+        ownerOfZombie(_tokenId)
         override
     {
         zombieApprovals[_tokenId] = _approved;
-        emit Approved(msg.sender , _approved, _tokenId);
+        emit Approval(msg.sender , _approved, _tokenId);
     }
 }
